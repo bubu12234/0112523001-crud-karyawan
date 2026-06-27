@@ -37,15 +37,40 @@ export async function initializeDatabase() {
     // 3. Create tables if they do not exist
     console.log(`Menginisialisasi tabel untuk database '${dbName}'...`);
     
+    // Prodi table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS prodi (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nama_prodi VARCHAR(100) NOT NULL UNIQUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB;
+    `);
+
+    // Insert prodi seed data
+    await pool.query(`
+      INSERT IGNORE INTO prodi (nama_prodi) VALUES
+      ('Informatika'),
+      ('Sistem Informasi'),
+      ('Teknik Elektro'),
+      ('Manajemen'),
+      ('Akuntansi');
+    `);
+
     // Mahasiswa table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS mahasiswa (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        nim VARCHAR(50) NOT NULL UNIQUE,
-        nama VARCHAR(255) NOT NULL,
-        prodi VARCHAR(100) NOT NULL,
+        nim VARCHAR(20) NOT NULL UNIQUE,
+        nama VARCHAR(100) NOT NULL,
+        prodi_id INT NOT NULL,
         angkatan INT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        foto VARCHAR(255) NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        CONSTRAINT fk_mahasiswa_prodi
+          FOREIGN KEY (prodi_id) REFERENCES prodi(id)
+          ON UPDATE CASCADE
+          ON DELETE RESTRICT
       ) ENGINE=InnoDB;
     `);
 
@@ -57,6 +82,19 @@ export async function initializeDatabase() {
         harga INT NOT NULL,
         stok INT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB;
+    `);
+
+    // Users table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        role ENUM('admin', 'operator', 'viewer') NOT NULL DEFAULT 'viewer',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB;
     `);
 

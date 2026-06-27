@@ -32,11 +32,11 @@ export default function ProdukTable({ produk, onEdit, onDelete }: Props) {
       <table className="data-table">
         <thead>
           <tr>
-            <th width="5%">No</th>
-            <th width="40%">Nama Produk</th>
-            <th width="20%">Harga</th>
-            <th width="15%">Stok</th>
-            <th width="20%" className="text-center">Aksi</th>
+            <th style={{ width: "5%" }}>No</th>
+            <th style={{ width: "40%" }}>Nama Produk</th>
+            <th style={{ width: "20%" }}>Harga</th>
+            <th style={{ width: "15%" }}>Stok</th>
+            <th style={{ width: "20%" }} className="text-center">Aksi</th>
           </tr>
         </thead>
 
