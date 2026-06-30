@@ -20,6 +20,7 @@ export default function MahasiswaPage() {
   const [mahasiswa, setMahasiswa] = useState<Mahasiswa[]>([]);
   const [prodiList, setProdiList] = useState<Prodi[]>([]);
   const [selectedMahasiswa, setSelectedMahasiswa] = useState<Mahasiswa | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -102,6 +103,7 @@ export default function MahasiswaPage() {
       }
 
       setSelectedMahasiswa(null);
+      setIsFormOpen(false);
       await loadMahasiswa();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal menyimpan data.");
@@ -156,6 +158,11 @@ export default function MahasiswaPage() {
               </span>
             </span>
           )}
+          {user?.role === "admin" && (
+            <Link href="/users">
+              <button className="btn-secondary">Kelola User</button>
+            </Link>
+          )}
           <Link href="/">
             <button className="btn-secondary">Beranda</button>
           </Link>
@@ -175,12 +182,27 @@ export default function MahasiswaPage() {
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="content-section">
-        {user && (canCreate || (canEdit && selectedMahasiswa)) && (
+        {user && canCreate && (
           <MahasiswaForm
-            selectedMahasiswa={selectedMahasiswa}
+            selectedMahasiswa={null}
             onSubmit={handleSubmit}
-            onCancelEdit={() => setSelectedMahasiswa(null)}
+            onCancelEdit={() => {}}
           />
+        )}
+
+        {isFormOpen && selectedMahasiswa && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <MahasiswaForm
+                selectedMahasiswa={selectedMahasiswa}
+                onSubmit={handleSubmit}
+                onCancelEdit={() => {
+                  setSelectedMahasiswa(null);
+                  setIsFormOpen(false);
+                }}
+              />
+            </div>
+          </div>
         )}
 
         <div>
@@ -221,7 +243,10 @@ export default function MahasiswaPage() {
             <>
               <MahasiswaTable
                 mahasiswa={mahasiswa}
-                onEdit={setSelectedMahasiswa}
+                onEdit={(m) => {
+                  setSelectedMahasiswa(m);
+                  setIsFormOpen(true);
+                }}
                 onDelete={handleDelete}
               />
 

@@ -133,3 +133,54 @@ export async function deleteMahasiswa(id: number): Promise<void> {
 
   await handleResponse(response);
 }
+
+// --- Users (Admin Only) ---
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: "admin" | "operator" | "viewer";
+  created_at?: string;
+};
+
+export async function getUsers() {
+  const response = await fetch(`${API_URL}/users`, {
+    headers: authHeader(),
+  });
+  const data = await handleResponse(response);
+  return data.data;
+}
+
+export async function createUser(data: any) {
+  const response = await fetch(`${API_URL}/users`, {
+    method: "POST",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(response);
+}
+
+export async function updateUser(id: number, data: any) {
+  const response = await fetch(`${API_URL}/users/${id}`, {
+    method: "PUT",
+    headers: { ...authHeader(), "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(response);
+}
+
+export async function deleteUser(id: number) {
+  const response = await fetch(`${API_URL}/users/${id}`, {
+    method: "DELETE",
+    headers: authHeader(),
+  });
+  return handleResponse(response);
+}
+
+export async function resetPassword(id: number) {
+  const response = await fetch(`${API_URL}/users/${id}/reset-password`, {
+    method: "PATCH",
+    headers: authHeader(),
+  });
+  return handleResponse(response);
+}

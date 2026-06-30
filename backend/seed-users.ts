@@ -9,19 +9,19 @@ import db from "./src/config/database";
 
 const users = [
   {
-    name: "Admin Sistem",
+    name: "Admin",
     email: "admin@kampus.ac.id",
     password: "admin123",
     role: "admin",
   },
   {
-    name: "Operator Data",
+    name: "Operator",
     email: "operator@kampus.ac.id",
     password: "operator123",
     role: "operator",
   },
   {
-    name: "Viewer Tamu",
+    name: "Viewer",
     email: "viewer@kampus.ac.id",
     password: "viewer123",
     role: "viewer",

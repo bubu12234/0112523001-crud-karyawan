@@ -130,7 +130,6 @@ export default function MahasiswaForm({
           type="text"
           value={nim}
           onChange={(e) => setNim(e.target.value)}
-          placeholder="Masukkan NIM"
           required
         />
       </div>
@@ -142,7 +141,6 @@ export default function MahasiswaForm({
           type="text"
           value={nama}
           onChange={(e) => setNama(e.target.value)}
-          placeholder="Masukkan nama lengkap"
           required
         />
       </div>
@@ -172,7 +170,6 @@ export default function MahasiswaForm({
             type="number"
             value={angkatan}
             onChange={(e) => setAngkatan(e.target.value)}
-            placeholder="Contoh: 2024"
             required
           />
         </div>
